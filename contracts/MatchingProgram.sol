@@ -95,7 +95,7 @@ contract MatchingProgram {
             matchingAmountLeft = 0;
             payable(recipient).transfer(amountToSend);
         }
-        if (donors[msg.sender] == 0) {} else {
+        if (donors[msg.sender] == 0) {
             donorCount += 1;
         }
         donors[msg.sender] += msg.value;
