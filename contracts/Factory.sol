@@ -23,8 +23,6 @@ contract Factory is CloneFactory, Ownable {
         bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
-        address inputSponsor,
-        bytes32 inputSponsorName,
         uint inputEndTime
     ) public {
         address clone = createClone(libraryAddress);
@@ -33,8 +31,6 @@ contract Factory is CloneFactory, Ownable {
             inputProgramDescription,
             intendedRecipient,
             inputRecipientName,
-            inputSponsor,
-            inputSponsorName,
             inputEndTime
         );
         emit MatchingProgramCreated(clone);

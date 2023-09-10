@@ -54,14 +54,10 @@ contract MatchingProgram {
         bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
-        address inputSponsor,
-        bytes32 inputSponsorName,
         uint inputEndTime
     ) {
         recipient = intendedRecipient;
         recipientName = inputRecipientName;
-        sponsor = inputSponsor;
-        sponsorName = inputSponsorName;
         programName = inputProgramName;
         programDescription = inputProgramDescription;
         endTime = inputEndTime;
@@ -74,14 +70,10 @@ contract MatchingProgram {
         bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
-        address inputSponsor,
-        bytes32 inputSponsorName,
         uint inputEndTime
     ) public {
         recipient = intendedRecipient;
         recipientName = inputRecipientName;
-        sponsor = inputSponsor;
-        sponsorName = inputSponsorName;
         programName = inputProgramName;
         programDescription = inputProgramDescription;
         endTime = inputEndTime;
@@ -89,7 +81,8 @@ contract MatchingProgram {
         donorCount = 0;
     }
 
-    function fundInitialMatchingAccount(uint ratio) external payable {
+    function fundInitialMatchingAccount(uint ratio,address inputSponsor,bytes32 inputSponsorName) 
+    external payable {
         if (msg.value == 0) revert NoAmountSent();
         if (state != 0) revert PastInitialFundState();
         if (ratio <= 0) revert RatioLessThanOne();
@@ -99,6 +92,8 @@ contract MatchingProgram {
         matchingAmountLeft = msg.value;
         matchingAmount = msg.value;
         matchingRatio = ratio;
+        sponsor = inputSponsor;
+        sponsorName = inputSponsorName;
         emit MatchingProgramStartedEvent(matchingAmountLeft);
         state = 1;
     }
