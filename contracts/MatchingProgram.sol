@@ -10,6 +10,8 @@ contract MatchingProgram {
     uint matchingAmount;
     uint matchingAmountLeft;
     bytes32 programName;
+    bytes32 programDescription;
+
     uint matchingRatio;
     uint endTime;
 
@@ -45,6 +47,7 @@ contract MatchingProgram {
 
     constructor(
         bytes32 inputProgramName,
+        bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
         address inputSponsor,
@@ -56,6 +59,7 @@ contract MatchingProgram {
         sponsor = inputSponsor;
         sponsorName = inputSponsorName;
         programName = inputProgramName;
+        programDescription = inputProgramDescription;
         endTime = inputEndTime;
         state = 0;
         donorCount = 0;
