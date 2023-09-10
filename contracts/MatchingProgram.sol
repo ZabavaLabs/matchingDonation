@@ -69,6 +69,26 @@ contract MatchingProgram {
         donorCount = 0;
     }
 
+    function init(
+        bytes32 inputProgramName,
+        bytes32 inputProgramDescription,
+        address intendedRecipient,
+        bytes32 inputRecipientName,
+        address inputSponsor,
+        bytes32 inputSponsorName,
+        uint inputEndTime
+    ) public {
+        recipient = intendedRecipient;
+        recipientName = inputRecipientName;
+        sponsor = inputSponsor;
+        sponsorName = inputSponsorName;
+        programName = inputProgramName;
+        programDescription = inputProgramDescription;
+        endTime = inputEndTime;
+        state = 0;
+        donorCount = 0;
+    }
+
     function fundInitialMatchingAccount(uint ratio) external payable {
         if (msg.value == 0) revert NoAmountSent();
         if (state != 0) revert PastInitialFundState();
