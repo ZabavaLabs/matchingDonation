@@ -7,6 +7,9 @@ contract MatchingProgram {
     address sponsor;
     bytes32 sponsorName;
 
+    address topDonor;
+    uint topDonatedAmount;
+
     uint matchingAmount;
     uint matchingAmountLeft;
     bytes32 programName;
@@ -20,6 +23,7 @@ contract MatchingProgram {
 
     event DonatedEvent(uint donatedAmount);
     event MatchingProgramStartedEvent(uint matchingAmount);
+    event NewTopDonorEvent(address donorAddress);
 
     error NoAmountSent();
     error PastInitialFundState();
@@ -99,6 +103,11 @@ contract MatchingProgram {
             donorCount += 1;
         }
         donors[msg.sender] += msg.value;
+        if (donors[msg.sender] > topDonatedAmount) {
+            topDonor = msg.sender;
+            topDonatedAmount = donors[msg.sender];
+            emit NewTopDonorEvent(msg.sender);
+        }
         emit DonatedEvent(amountToSend);
     }
 
