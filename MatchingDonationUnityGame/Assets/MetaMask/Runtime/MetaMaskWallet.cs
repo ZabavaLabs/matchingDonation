@@ -109,7 +109,7 @@ namespace MetaMask
             "wallet_addEthereumChain",
             "wallet_switchEthereumChain"
         };
-        
+
         protected static List<string> MethodsToSendToFallback = new List<string>() {
             "eth_call",
         };
@@ -211,7 +211,7 @@ namespace MetaMask
         /// <summary>Gets the currently selected address.</summary>
         /// <returns>The currently selected address.</returns>
         public string SelectedAddress => this.selectedAddress;
-        
+
         /// <summary>
         /// Gets the currently selected chain as a long.
         /// </summary>
@@ -267,7 +267,7 @@ namespace MetaMask
         #region Constructors
 
         public MetaMaskWallet(MetaMaskDataManager dataManager, string appName, string appUrl,
-            string sessionId, IEciesProvider eciesProvider, IMetaMaskTransport transport, 
+            string sessionId, IEciesProvider eciesProvider, IMetaMaskTransport transport,
             IMetaMaskSocketWrapper socket, string socketUrl = SocketUrl)
         {
             this.sessionId = sessionId;
@@ -299,7 +299,7 @@ namespace MetaMask
 
             this.socket.Connected += OnSocketConnected;
             this.socket.Disconnected += OnSocketDisconnected;
-            
+
             _eventDelegator = new EventDelegator(this.session.Data.ChannelId);
         }
 
@@ -356,12 +356,12 @@ namespace MetaMask
                     MetaMaskDebug.LogWarning("Message in queue is null! Perhaps this object was collected by GC?");
                     continue;
                 }
-                
+
                 MetaMaskDebug.Log("Sending queued message");
                 SendMessage(message, true);
                 MetaMaskDebug.Log("Queued message sent!");
             }
-            
+
             queuedMessage.Clear();
         }
 
@@ -417,12 +417,12 @@ namespace MetaMask
         {
             if (this.paused)
                 return;
-            
+
             MetaMaskDebug.Log("Wallet Paused");
             this.paused = true;
 
             WalletPausedHandler?.Invoke(this, null);
-            
+
             // Re-save the connection urls with redirect
             /*if (transport.IsMobile)
             {
@@ -431,7 +431,7 @@ namespace MetaMask
 
             SaveSession();
         }
-        
+
         protected async Task ValidateKeyExchange()
         {
             MetaMaskDebug.Log("Key validation requested");
@@ -457,12 +457,12 @@ namespace MetaMask
             {
                 Method = request.Method,
             };
-            
+
             _eventDelegator.ListenForOnce<MetaMaskTypedDataMessage<JsonRpcError>>($"{id}-error", (sender, @event) =>
             {
                 this.connectionTcs.TrySetException(new Exception(@event.EventData.Data.Error.Message));
             });
-            
+
             _eventDelegator.ListenForOnce<string>($"{id}-result", (sender, @event) =>
             {
                 var data =
@@ -473,7 +473,7 @@ namespace MetaMask
             MetaMaskDebug.Log("Sending eth_requestAccounts for key validation");
             this.submittedRequests.Add(id, submittedRequest);
             SendEthereumRequest(id, request, false);
-            
+
             try
             {
                 await this.connectionTcs.Task;
@@ -570,7 +570,7 @@ namespace MetaMask
 
             // Join the channel
             JoinChannel(channelId);
-            
+
             // Alert transport we have connected
             transport.OnConnectRequest();
         }
@@ -598,7 +598,7 @@ namespace MetaMask
         {
             MetaMaskDebug.Log("Message received");
             MetaMaskDebug.Log(response);
-            
+
             if (response.StartsWith("{"))
                 await HandleResponseWithTypes<MetaMaskMessage<KeyExchangeMessage>, MetaMaskMessage<string>>(response,
                     message => HandleKeyExchangeMessage(message.Message),
@@ -638,7 +638,7 @@ namespace MetaMask
                     {
                         await encryptedMessageCallback(encryptedMessages);
                     }
-                } 
+                }
                 catch (Exception e)
                 {
                     MetaMaskDebug.LogException(e);
@@ -705,7 +705,7 @@ namespace MetaMask
                 // Test key exchange by sending eth_requestAccounts
                 await ValidateKeyExchange();
                 if (!transport.IsMobile) return;
-                    
+
                 await OnWalletAuthorized();
                 return;
             }
@@ -750,7 +750,7 @@ namespace MetaMask
         protected void HandleKeyExchangeMessage(KeyExchangeMessage message)
         {
             var messageType = message.Type;
-            
+
             if (messageType == "key_handshake_start")
             {
                 // Always restart key exchange when we get key_handshake_start
@@ -760,7 +760,7 @@ namespace MetaMask
                 this.paused = false;
                 this.connected = false;
                 this.sessionEnded = false;
-                
+
                 ClearValidateTask();
 
                 ExchangeKeys();
@@ -788,7 +788,7 @@ namespace MetaMask
 
                 // Exchange keys again?
                 ExchangeKeys(true);
-                
+
                 // Ping?
                 // SendMessage(new MetaMaskPing(), false);
                 return;
@@ -798,7 +798,7 @@ namespace MetaMask
         protected void OnOtpReceived(int answer)
         {
             MetaMaskDebug.Log($"Displaying OTP Answer");
-            
+
             this.transport.OnOTPCode(answer);
         }
 
@@ -827,10 +827,10 @@ namespace MetaMask
                     SaveConnectionUrl();
                 }
                 */
-                
+
                 //WalletReady?.Invoke(this, EventArgs.Empty);
             }
-            
+
             //ExchangeKeys();
         }
 
@@ -1022,8 +1022,8 @@ namespace MetaMask
 
             if (MethodsToRedirect.Contains(method))
             {
-                return true; 
-            } 
+                return true;
+            }
             else if (this.paused && transport.IsMobile)
             {
                 // Set a connection redirect URL so we can open deeplink for this method
@@ -1061,7 +1061,7 @@ namespace MetaMask
                     throw;
                 }
             }
-            
+
             // If we have a fallback provider, and this can be given to the fallback provider. Do that,
             // unless the method requires the wallet.
             if (FallbackProvider != null && MethodsToSendToFallback.Contains(request.Method))
@@ -1099,7 +1099,7 @@ namespace MetaMask
                     Connect();
                     MetaMaskDebug.Log("Socket re-connected, resuming request sending");
                 }
-                
+
                 // Send and deeplink if we're on mobile, wallet will auto-resume
                 var tcs = new TaskCompletionSource<TR>();
                 var id = Guid.NewGuid().ToString();
@@ -1107,19 +1107,19 @@ namespace MetaMask
                 {
                     Method = request.Method,
                 };
-                
+
                 _eventDelegator.ListenForOnce<MetaMaskTypedDataMessage<JsonRpcError>>($"{id}-error", (sender, @event) =>
                 {
                     var ex = new Exception(@event.EventData.Data.Error.Message);
                     tcs.TrySetException(ex);
                 });
-                
+
                 _eventDelegator.ListenForOnce<string>($"{id}-result", (sender, @event) =>
                 {
                     var result = JsonConvert.DeserializeObject<MetaMaskTypedDataMessage<JsonRpcResult<TR>>>(@event.EventData, Converters);
                     tcs.TrySetResult(result.Data.Result);
                 });
-                
+
                 this.submittedRequests.Add(id, submittedRequest);
                 SendEthereumRequest(id, request, this.socketConnected && ShouldOpenMM(request.Method));
                 return tcs.Task;
@@ -1153,12 +1153,12 @@ namespace MetaMask
         public void Connect()
         {
             MetaMaskDebug.Log("Connecting...");
-            
+
             ReloadNewSession();
-            
+
             this.connectionTcs = new TaskCompletionSource<string[]>();
             ClearValidateTask();
-            
+
             if (string.IsNullOrWhiteSpace(this.session.Data.ChannelId))
                 this.session.Data.ChannelId = Guid.NewGuid().ToString();
 
@@ -1188,10 +1188,10 @@ namespace MetaMask
 
             if (redirect)
                 urlParams += "&redirect=true";
-            
+
             this.universalConnectionUrl = $"{MetaMaskUniversalLinkUrl}/connect?{urlParams}";
             this.deeplinkConnectionUrl = $"{MetaMaskDeepLinkUrl}connect?{urlParams}";
-            
+
             MetaMaskDebug.Log("Setting connection URLs: " + this.universalConnectionUrl);
             try
             {
@@ -1209,7 +1209,7 @@ namespace MetaMask
         {
             MetaMaskDebug.Log("Disconnected");
             LeaveChannel();
-            
+
             this.transport.OnDisconnect();
 
             this.connected = false;
@@ -1222,13 +1222,13 @@ namespace MetaMask
             this.handshakeCompleted = false;
 
             this.walletPublicKey = string.Empty;
-            
+
             this.selectedAddress = string.Empty;
             this.selectedChainId = string.Empty;
 
             this.socket.DisconnectAsync();
             WalletDisconnectedHandler?.Invoke(this, EventArgs.Empty);
-            
+
             SaveSession();
         }
 
@@ -1257,7 +1257,7 @@ namespace MetaMask
         }
 
         #endregion
-        
+
         // Used by evm.net
         public string ConnectedAddress
         {
@@ -1266,7 +1266,7 @@ namespace MetaMask
                 return SelectedAddress;
             }
         }
-        
+
         public Task<object> Request(MetaMaskEthereumRequest request)
         {
             return this.Request<object>(request);
@@ -1293,11 +1293,11 @@ namespace MetaMask
         public void EndSession(bool forceDisconnect = false)
         {
             sessionEnded = true;
-            
+
 #pragma warning disable CS0618
             ClearSession();
 #pragma warning restore CS0618
-            
+
             if (IsConnected || forceDisconnect)
                 Disconnect();
         }

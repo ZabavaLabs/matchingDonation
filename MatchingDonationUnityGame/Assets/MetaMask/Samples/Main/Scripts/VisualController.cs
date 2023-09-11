@@ -6,6 +6,7 @@ using MetaMask.Transports.Unity.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace MetaMask.Unity.Samples
 {
@@ -70,7 +71,7 @@ namespace MetaMask.Unity.Samples
         {
             // Wait for new frame
             yield return new WaitForEndOfFrame();
-            
+
             OpenMainScreen();
             WalletStartVisuals();
         }
@@ -83,31 +84,34 @@ namespace MetaMask.Unity.Samples
                 OpenWelcomeScreen();
             }
             WalletStopVisuals();*/
-            
+
             Debug.Log("[VisualController] Wallet paused");
         }
         public void OpenMainScreen()
         {
             StopAllCoroutines();
-            if(Application.platform == RuntimePlatform.Android && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() || Application.platform == RuntimePlatform.IPhonePlayer && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable())
+            if (Application.platform == RuntimePlatform.Android && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() || Application.platform == RuntimePlatform.IPhonePlayer && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable())
             {
                 DeeplinkButton.gameObject.SetActive(true);
                 // why?? DeeplinkFeedback() reopens Welcome screen after 4 seconds
                 //visualCoroutine = StartCoroutine(DeeplinkFeedback());
-            }else
+            }
+            else
             {
                 DeeplinkButton.gameObject.SetActive(false);
             }
-            this.welcomeScreen.SetActive(false);
-            this.mainScreen.SetActive(true);
+            //this.welcomeScreen.SetActive(false);
+            //this.mainScreen.SetActive(true);
+            SceneManager.LoadScene("GameScene");
         }
 
         public void OpenWelcomeScreen()
         {
-            if(Application.platform == RuntimePlatform.Android && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() || Application.platform == RuntimePlatform.IPhonePlayer && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable())
+            if (Application.platform == RuntimePlatform.Android && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() || Application.platform == RuntimePlatform.IPhonePlayer && MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable())
             {
                 DeeplinkButton.gameObject.SetActive(true);
-            }else
+            }
+            else
             {
                 DeeplinkButton.gameObject.SetActive(false);
             }
@@ -140,7 +144,8 @@ namespace MetaMask.Unity.Samples
             if (MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() && Application.platform == RuntimePlatform.Android || MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() && Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 this.DeeplinkButton.interactable = true;
-            }else
+            }
+            else
             {
                 this.DeeplinkButton.gameObject.SetActive(false);
             }
@@ -155,7 +160,8 @@ namespace MetaMask.Unity.Samples
             if (MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() && Application.platform == RuntimePlatform.Android || MetaMaskUnityUITransport.DefaultInstance.IsDeeplinkAvailable() && Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 this.DeeplinkButton.interactable = false;
-            }else
+            }
+            else
             {
                 this.DeeplinkButton.gameObject.SetActive(false);
             }
@@ -184,15 +190,15 @@ namespace MetaMask.Unity.Samples
         {
             if (!enableResultModal)
                 return;
-            
+
             ModalData modalData = new ModalData();
             modalData.type = ModalData.ModalType.Transaction;
             modalData.headerText = "Result Received";
             modalData.bodyText = string.Format("<b>Method Name:</b><br> {0} <br> <br> <b>Transaction Details:</b><br>{1}", e.Request.Method, e.Result.ToString());
             UIModalManager.Instance.OpenModal(modalData);
         }
-        
-        
+
+
 
         #region Coroutine
 
@@ -206,7 +212,7 @@ namespace MetaMask.Unity.Samples
             yield return new WaitForSeconds(4f);
             OpenWelcomeScreen();
         }*/
-        
+
 
         #endregion
 

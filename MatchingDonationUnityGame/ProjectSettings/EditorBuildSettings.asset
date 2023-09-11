@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MetaMask/Samples/Main/Scenes/MetaMask Main (Sample).unity
-    guid: ca0505b2cc25d9343a2ee46407aa8970
+    path: Assets/Scenes/MetamaskLoginScene.unity
+    guid: aba801d33bea0ea45ad59c5fc01da4d6
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: 35aea071a7e64554a9c8c36b6e1663f0
   m_configObjects: {}
