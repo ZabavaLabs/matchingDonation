@@ -1,5 +1,7 @@
 pragma solidity >=0.4.22 <0.9.0;
 
+import "./SoulBound.sol";
+
 contract MatchingProgram {
     uint public state;
     address recipient;
@@ -14,12 +16,17 @@ contract MatchingProgram {
     uint matchingAmountLeft;
     bytes32 programName;
     bytes32 programDescription;
+    bytes32 category;
+    address SBTOwnerAddress;
+
 
     uint matchingRatio;
     uint endTime;
 
     mapping(address => uint) donors;
     uint donorCount;
+
+
 
     event DonatedEvent(uint donatedAmount);
     event MatchingProgramStartedEvent(uint matchingAmount);
@@ -50,12 +57,17 @@ contract MatchingProgram {
     }
 
     constructor(
+        address inputSBTOwner,
+        bytes32 inputCategory,
+        
         bytes32 inputProgramName,
         bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
         uint inputEndTime
     ) {
+        SBTOwnerAddress = inputSBTOwner;
+        category = inputCategory;
         recipient = intendedRecipient;
         recipientName = inputRecipientName;
         programName = inputProgramName;
@@ -66,12 +78,16 @@ contract MatchingProgram {
     }
 
     function init(
+        address inputSBTOwner,
+        bytes32 inputCategory,
         bytes32 inputProgramName,
         bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
         uint inputEndTime
     ) public {
+        SBTOwnerAddress = inputSBTOwner;
+        category = inputCategory;
         recipient = intendedRecipient;
         recipientName = inputRecipientName;
         programName = inputProgramName;
@@ -123,12 +139,19 @@ contract MatchingProgram {
             topDonatedAmount = donors[msg.sender];
             emit NewTopDonorEvent(msg.sender);
         }
+
         emit DonatedEvent(amountToSend);
     }
 
     function endFundRaise() external {
         if (block.timestamp < endTime) {
             revert FundraiseEnded();
+        }
+        // send SBT to top donor if exist
+        if (donorCount != 0){
+            
+            SoulBoundToken(SBTOwnerAddress).safeMint(topDonor);
+            
         }
         state = 2;
     }

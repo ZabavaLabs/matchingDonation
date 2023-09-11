@@ -19,14 +19,19 @@ contract Factory is CloneFactory, Ownable {
     }
 
     function CreateNewProgram(
+        address inputSBTOwner,
+        bytes32 inputCategory,
         bytes32 inputProgramName,
         bytes32 inputProgramDescription,
         address intendedRecipient,
         bytes32 inputRecipientName,
         uint inputEndTime
     ) public {
+        
         address clone = createClone(libraryAddress);
         MatchingProgram(clone).init(
+            inputSBTOwner,
+            inputCategory,
             inputProgramName,
             inputProgramDescription,
             intendedRecipient,
