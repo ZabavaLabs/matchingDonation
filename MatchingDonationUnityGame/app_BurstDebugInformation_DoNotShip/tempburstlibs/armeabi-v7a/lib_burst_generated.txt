@@ -150,8 +150,8 @@ Library: lib_burst_generated
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Unity.Burst.dll
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Unity.RenderPipeline.Universal.ShaderLibrary.dll
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
---root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\MetaMask.Runtime.dll
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
+--root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\MetaMask.Runtime.dll
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Unity.2D.SpriteShape.Runtime.dll
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Unity.Services.Core.Internal.dll
 --root-assembly=D:\projects\matchingDonation\MatchingDonationUnityGame\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
