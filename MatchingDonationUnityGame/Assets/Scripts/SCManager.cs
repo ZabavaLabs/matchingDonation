@@ -92,4 +92,41 @@ public class SCManager : MonoBehaviour
         Debug.Log(res);
 
     }
+
+    public async void DonateTransaction()
+    {
+        var wallet = MetaMaskUnity.Instance.Wallet;
+
+        
+
+        // 0xdb29dda1
+        Debug.Log("Wallet Selected Address");
+        Debug.Log(wallet.SelectedAddress);
+        Debug.Log("EndTime");
+        
+
+        var transactionParams = new MetaMaskTransaction
+        {
+            To = "0x4156EDbAFC5091507dE2dD2a53dEd551a346f83b",
+            From = MetaMaskUnity.Instance.Wallet.SelectedAddress,
+            Value = "0x0",
+            //Data = transactionInput.Data,
+
+            ChainId = "5001"
+        };
+        Debug.Log("Request");
+
+        var request = new MetaMaskEthereumRequest
+        {
+            Method = "eth_sendTransaction",
+            Parameters = new MetaMaskTransaction[] { transactionParams }
+
+        };
+
+        onTransactionSent?.Invoke(this, EventArgs.Empty);
+
+        var res = await wallet.Request(request);
+        Debug.Log("Response");
+        Debug.Log(res);
+    }
 }
